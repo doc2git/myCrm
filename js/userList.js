@@ -1,5 +1,5 @@
 let UserList = (() => {
-  let pageTotal = 0, pageCode = 1;
+  let pageTotal = 0, pageCode = 1, isSelected=false;
   let bindHTML = () => {
     console.log('4skldf', pageCode);
     $.ajax({
@@ -14,16 +14,20 @@ let UserList = (() => {
     });
     function page(res) { //为了让page函数在预解释阶段声明且赋值，特意用function关键自定义
       console.log('14dsjsjdf', res, pageCode);
-      if (!res) return void 0;
+      // if (!res) return void 0;
       pageTotal = res['pageTotal'];
+      // let pgCode  = /pageCode=(\d+)/.exec(window.location.href);
+      // pgCode = pgCode ? pgCode[1] : 1;
+      // console.log(pgCode, '19dksfj');
+      if(!isSelected) pageCode = localStorage.getItem('defaultPageCode');
+      console.log(pageCode, '23dfklj');
       pageCode = Math.min(Math.max(1, pageCode), pageTotal);
       let data = res['data'];
-      console.log(data, '19ksdjf', data.name, data.score);
       let str = data.map(item => (
         `<li data-id="${item['id']}">
          <span>${item['id']}</span>
          <span>${item['name']}</span>
-         <span>${item['sex'] === String(1) ? '男' : '女'}</span>
+         <span>${Number(item['sex']) === 1 ? '男' : '女'}</span>
          <span>${item['score']}</span>
          <span>
          <button class="del">删除</button>
@@ -40,7 +44,6 @@ let UserList = (() => {
       console.log(str);
       $('#pageNum').html(str);
       $('#pageInput').val(pageCode);
-      console.log(data, '41ksdjf', data.name, data.score);
     }
   };
   return {
@@ -60,6 +63,7 @@ let UserList = (() => {
             text === '尾页' ? pageCode = pageTotal : pageCode++;
             break;
         }
+        isSelected = true;
         console.log('55dsjsjdf', pageCode);
         bindHTML();
       });
@@ -67,6 +71,7 @@ let UserList = (() => {
         let text = event.target.innerText;
         !isNaN(text) ? pageCode = text : null;
         console.log(pageCode);
+        isSelected = true;
         bindHTML();
       });
       $("#pageInput").on("keyup", function (e) {
@@ -138,8 +143,11 @@ let UserList = (() => {
       });
       //查看和修改用户信息
       $('#list').on('click', '.check', function () {
+        localStorage.setItem('defaultPageCode', pageCode);
+        console.log('146kfj', localStorage.getItem('defaultPageCode'), 'salt');
         let text = $(this.parentNode.parentNode).text();
         let infoAry = text.match(/(.+)\n/gu).slice(0, 4).map(item => item.replace(/\s/g, ''));
+        // console.log('143dsjf', pageCode);
         let url = encodeURI('./userInfo.html?id=' + infoAry[0] + '&name=' + infoAry[1] + '&sex=' + infoAry[2] + '&score=' + infoAry[3]);
         window.open(url);
       })

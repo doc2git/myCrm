@@ -32,10 +32,14 @@
 <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
 <script>
   'use strict';
-  decodeURI(window.location.href).match(/[^\?&]+=[^\?&]+/gu)
-    .map(item => item.replace(
-      /([^=]+)=([^=]+)$/gu, (all, key, val)=>`${key}.value='${val}'`
-    )).forEach(item=>eval("document.querySelector('form')." + item));
+let userInfo = decodeURI(window.location.href).match(/[^\?&]+=[^\?&]+/gu)
+          //    .map(item => item.replace( //通过正则准备好填入表单value语句，并eval执行的方式,但是有被注入攻击风险，所以不用这方式
+//      /([^=]+)=([^=]+)$/gu, (all, key, val)=>`${key}.value='${val}'` //通过正则准备好填入表单value语句，并eval执行的方式，但是有被注入攻击风险，所以不用这方式
+//    )).forEach(item=>eval("document.querySelector('form')." + item)); //通过正则准备好填入表单value语句，并eval执行的方式，但是有被注入攻击风险，所以不用这方式
+//  ) //通过正则准备好填入表单value语句，并eval执行的方式
+    .map(item => item.split('='))
+  .filter(item=>item[0] !== 'pageCode')
+    .forEach(item => $('form')[0][item[0]]['value'] = item[1]);
   $('#sub').click((event)=>{
     console.log('40ksdfj');
     $.ajax({
@@ -50,21 +54,22 @@
         id: $('#id').val(),
         name: $('#name').val(),
         sex: $('#sex').val() === '男' ? 1 : 0,
-        score: $('#score').val()
+        score: $('#score').val(),
       },
       cache: false,
       success: res => {
-        if (res && res.code === 0) {
-          alert('修改用户信息成功！');
-          window.open('./userInfo.html?pageCode=' + res.pageTotal);
-//          bindHTML();
-//          $('form')[0].reset();
+        console.log(res);
+        if (res && res.code === 1) {
+          alert('修改用户信息失败！');
         } else {
           alert('修改用户信息成功！');
+//          let target = './userList.html?pageCode=' + /pageCode=(\d+)/.exec(window.location.href)[1];
+          let target = './userList.html';
+          console.log(target);
+          window.location.href = target;
         }
       },
-      error: e => {
-      }
+      error: e => {console.log('没有拿到数据返回！')}
     })
-  })
+  });
 </script>
