@@ -1,5 +1,6 @@
 let UserList = (() => {
   let pageTotal = 0, pageCode = 1, isSelected=false;
+  if(!isSelected) pageCode = localStorage.getItem('defaultPageCode');
   let bindHTML = () => {
     $.ajax({
       type: 'GET',
@@ -13,7 +14,7 @@ let UserList = (() => {
     });
     function page(res) { //为了让page函数在预解释阶段声明且赋值，特意用function关键自定义
       pageTotal = res['pageTotal'];
-      if(!isSelected) pageCode = localStorage.getItem('defaultPageCode');
+      // if(!isSelected) pageCode = localStorage.getItem('defaultPageCode');
       pageCode = Math.min(Math.max(1, pageCode), pageTotal);
       let data = res['data'];
       let str = data.map(item => (
@@ -60,6 +61,7 @@ let UserList = (() => {
         let text = event.target.innerText;
         !isNaN(text) ? pageCode = text : null;
         isSelected = true;
+        console.log('64dfj');
         bindHTML();
       });
       $("#pageInput").on("keyup", function (e) {

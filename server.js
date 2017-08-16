@@ -35,7 +35,7 @@ app.get('/getUserList', (req, res) => {
 app.post('/addUser', (req, res) => {
   let addUserData = req.body;
   let len = addUserData.length;
-  addUserData['id'] = userAllAry.slice(-1)[0]['id'] + 1;
+  addUserData['id'] = Number(userAllAry.slice(-1)[0]['id']) + 1;
   userAllAry.push(addUserData);
   resObj.data = userAllAry;
   resObj.data ? successObj() : failedObj();
@@ -70,7 +70,7 @@ app.post('/changeUserInfo', (req, res) => {
   }).then(
     () => fs.writeFile('./data/userList.json', JSON.stringify(userAllAry), 'utf-8', err => {
       if (err) console.error('78sdklfj', err);
-      console.log('79skdfj: modify data in json file successed!', JSON.parse(fs.readFileSync('./data/userList.json', 'utf-8'))[changeUserId - 1]);
+      console.log('79skdfj: modify data in json file successed!', JSON.parse(fs.readFileSync('./data/userList.json', 'utf-8')).find(item=>item.id=[changeUserId - 1]));
       res.send(resObj);
     }));
 });
