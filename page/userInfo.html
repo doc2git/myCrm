@@ -41,7 +41,6 @@ let userInfo = decodeURI(window.location.href).match(/[^\?&]+=[^\?&]+/gu)
   .filter(item=>item[0] !== 'pageCode')
     .forEach(item => $('form')[0][item[0]]['value'] = item[1]);
   $('#sub').click((event)=>{
-    console.log('40ksdfj');
     $.ajax({
       type: 'post',
       url: '/changeUserInfo',
@@ -58,14 +57,11 @@ let userInfo = decodeURI(window.location.href).match(/[^\?&]+=[^\?&]+/gu)
       },
       cache: false,
       success: res => {
-        console.log(res);
         if (res && res.code === 1) {
           alert('修改用户信息失败！');
         } else {
           alert('修改用户信息成功！');
-//          let target = './userList.html?pageCode=' + /pageCode=(\d+)/.exec(window.location.href)[1];
           let target = './userList.html';
-          console.log(target);
           window.location.href = target;
         }
       },

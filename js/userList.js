@@ -1,7 +1,6 @@
 let UserList = (() => {
   let pageTotal = 0, pageCode = 1, isSelected=false;
   let bindHTML = () => {
-    console.log('4skldf', pageCode);
     $.ajax({
       type: 'GET',
       url: '/getUserList',
@@ -13,14 +12,8 @@ let UserList = (() => {
       },
     });
     function page(res) { //为了让page函数在预解释阶段声明且赋值，特意用function关键自定义
-      console.log('14dsjsjdf', res, pageCode);
-      // if (!res) return void 0;
       pageTotal = res['pageTotal'];
-      // let pgCode  = /pageCode=(\d+)/.exec(window.location.href);
-      // pgCode = pgCode ? pgCode[1] : 1;
-      // console.log(pgCode, '19dksfj');
       if(!isSelected) pageCode = localStorage.getItem('defaultPageCode');
-      console.log(pageCode, '23dfklj');
       pageCode = Math.min(Math.max(1, pageCode), pageTotal);
       let data = res['data'];
       let str = data.map(item => (
@@ -35,13 +28,10 @@ let UserList = (() => {
          </span>
          </li>`
       )).join('');
-      data.forEach(item => console.log(item['name']), '32dksjf');
       $('#list').html(str);
-      console.log('30dsjsjdf', pageCode);
       str = new Array(pageTotal).fill('').fill(' class="bg" ', pageCode - 1, pageCode)
         .map((item, index) => '<li' + item + '>' + (Number(index) + 1) + '</li>')
         .join('');
-      console.log(str);
       $('#pageNum').html(str);
       $('#pageInput').val(pageCode);
     }
@@ -64,13 +54,11 @@ let UserList = (() => {
             break;
         }
         isSelected = true;
-        console.log('55dsjsjdf', pageCode);
         bindHTML();
       });
       $("#pageNum").on("click", "font", function (event) {
         let text = event.target.innerText;
         !isNaN(text) ? pageCode = text : null;
-        console.log(pageCode);
         isSelected = true;
         bindHTML();
       });
@@ -89,7 +77,6 @@ let UserList = (() => {
         let userId = $(this.parentNode.parentNode).attr("data-id"),
           flag = confirm((`确定要删除ID为【 ${userId} 】的信息吗`)),
           _this = this;
-        console.log('66lkdsf', userId);
         if (!flag) return void 0;
         $.ajax({
           type: 'get',
@@ -144,10 +131,8 @@ let UserList = (() => {
       //查看和修改用户信息
       $('#list').on('click', '.check', function () {
         localStorage.setItem('defaultPageCode', pageCode);
-        console.log('146kfj', localStorage.getItem('defaultPageCode'), 'salt');
         let text = $(this.parentNode.parentNode).text();
         let infoAry = text.match(/(.+)\n/gu).slice(0, 4).map(item => item.replace(/\s/g, ''));
-        // console.log('143dsjf', pageCode);
         let url = encodeURI('./userInfo.html?id=' + infoAry[0] + '&name=' + infoAry[1] + '&sex=' + infoAry[2] + '&score=' + infoAry[3]);
         window.open(url);
       })

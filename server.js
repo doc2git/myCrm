@@ -8,20 +8,17 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res) => res.sendFile('./page/userList.html', {root: __dirname}));
 app.get('/userInfo.html', (req, res) => res.sendFile('./page/userInfo.html', {root: __dirname}));
 app.get('/userList.html', (req, res) => {
-  console.log(11);
   res.sendFile('./page/userList.html', {root: __dirname});
 });
 let userAllAry = JSON.parse(fs.readFileSync('./data/userList.json', 'utf-8'));
 let resObj = {pageTotal: Math.ceil(userAllAry.length / 10)};
 let successObj = () => {
   resObj.code = 0;
-  console.log('18sdfj', resObj.code);
   resObj.msg = "successed";
   resObj.pageTotal = Math.ceil(userAllAry.length / 10);
 };
 let failedObj = () => {
   resObj.code = 1;
-  // console.log('24sdfj', resObj.code);
   resObj.msg = 'some error';
 };
 app.get('/userInfo', (req, res) => {
@@ -59,25 +56,21 @@ app.post('/changeUserInfo', (req, res) => {
   new Promise((resolve, reject) => {
     resObj.data = userAllAry.find((item, index) => {
       if (Number(item['id']) === Number(changeUserId)) {
-        console.log('59ksldjf', Number(item['id']) === Number(changeUserId), item, index, Number(item['id']), Number(changeUserId));
-        // console.log(req.body['sex'], '60sdkjf');
         req.body['sex'] = Number(req.body['sex']);
         old = userAllAry.splice(index, 1, req.body)[0];
       }
     });
-    if(old && Number(old.id) == changeUserId ){
+    if(old && Number(old.id) === changeUserId ){
       successObj();
       resolve(userAllAry[changeUserId - 1]);
     }else{
       failedObj();
       reject('76skdfj: update data in userAllAry failed.')
     }
-  }).then((item)=>console.log(item))
-
-    .then(() => fs.writeFile('./data/userList.json', JSON.stringify(userAllAry), 'utf-8', err => {
+  }).then(
+    () => fs.writeFile('./data/userList.json', JSON.stringify(userAllAry), 'utf-8', err => {
       if (err) console.error('78sdklfj', err);
       console.log('79skdfj: modify data in json file successed!', JSON.parse(fs.readFileSync('./data/userList.json', 'utf-8'))[changeUserId - 1]);
-      console.log('81sdkfj', resObj, resObj.code);
       res.send(resObj);
     }));
 });
