@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+    <style>
+        .box {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <form id="f" action="http://localhost:3333/addUser">
+        <label for="id">编号</label>
+        <input type="text" id="id" name="id" disabled>
+        <br>
+        <label for="name">姓名</label>
+        <input type="text" id="name" name="name">
+        <br>
+        <label for="sex">性别</label>
+        <input type="text" id="sex" name="sex">
+        <br>
+        <label for="score">分数</label>
+        <input type="text" id="score" name="score">
+        <br>
+        <input type="button" value="修改用户" id="sub">
+    </form>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<script>
+  'use strict';
+let userInfo = decodeURI(window.location.href).match(/[^\?&]+=[^\?&]+/gu)
+          //    .map(item => item.replace( //通过正则准备好填入表单value语句，并eval执行的方式,但是有被注入攻击风险，所以不用这方式
+//      /([^=]+)=([^=]+)$/gu, (all, key, val)=>`${key}.value='${val}'` //通过正则准备好填入表单value语句，并eval执行的方式，但是有被注入攻击风险，所以不用这方式
+//    )).forEach(item=>eval("document.querySelector('form')." + item)); //通过正则准备好填入表单value语句，并eval执行的方式，但是有被注入攻击风险，所以不用这方式
+//  ) //通过正则准备好填入表单value语句，并eval执行的方式
+    .map(item => item.split('='))
+  .filter(item=>item[0] !== 'pageCode')
+    .forEach(item => $('form')[0][item[0]]['value'] = item[1]);
+  $('#sub').click((event)=>{
+    $.ajax({
+      type: 'post',
+      url: '/changeUserInfo',
+      async: false,
+      header: {
+        'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: {
+        id: $('#id').val(),
+        name: $('#name').val(),
+        sex: $('#sex').val() === '男' ? 1 : 0,
+        score: $('#score').val(),
+      },
+      cache: false,
+      success: res => {
+        if (res && res.code === 1) {
+          alert('修改用户信息失败！');
+        } else {
+          alert('修改用户信息成功！');
+          let target = './userList.html';
+          window.location.href = target;
+        }
+      },
+      error: e => {console.log('没有拿到数据返回！')}
+    })
+  });
+</script>
