@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+    <style>
+        .box {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <form id="f" action="http://localhost:3333/addUser">
+        <label for="id">编号</label>
+        <input type="text" id="id" name="id" disabled>
+        <br>
+        <label for="name">姓名</label>
+        <input type="text" id="name" name="name">
+        <br>
+        <label for="sex">性别</label>
+        <input type="text" id="sex" name="sex">
+        <br>
+        <label for="score">分数</label>
+        <input type="text" id="score" name="score">
+        <br>
+        <input type="button" value="修改用户" id="sub">
+    </form>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<script>
+  'use strict';
+  decodeURI(window.location.href).match(/[^\?&]+=[^\?&]+/gu)
+    .map(item => item.replace(
+      /([^=]+)=([^=]+)$/gu, (all, key, val)=>`${key}.value='${val}'`
+    )).forEach(item=>eval("document.querySelector('form')." + item));
+  $('#sub').click((event)=>{
+    console.log('40ksdfj');
+    $.ajax({
+      type: 'post',
+      url: '/changeUserInfo',
+      async: false,
+      header: {
+        'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: {
+        id: $('#id').val(),
+        name: $('#name').val(),
+        sex: $('#sex').val() === '男' ? 1 : 0,
+        score: $('#score').val()
+      },
+      cache: false,
+      success: res => {
+        if (res && res.code === 0) {
+          alert('修改用户信息成功！');
+          window.open('./userInfo.html?pageCode=' + res.pageTotal);
+//          bindHTML();
+//          $('form')[0].reset();
+        } else {
+          alert('修改用户信息成功！');
+        }
+      },
+      error: e => {
+      }
+    })
+  })
+</script>

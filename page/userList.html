@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+    <link rel="stylesheet" href="../css/userList.css">
+</head>
+<body>
+<div class="box" id="box">
+    <h2 class="head">
+        <span>编号</span>
+        <span>姓名</span>
+        <span>性别</span>
+        <span>分数</span>
+        <span>操作</span>
+    </h2>
+    <ul id="list" class="list"></ul>
+    <div id="page" class="page">
+        <span>首页</span>
+        <span>上一页</span>
+        <ul id="pageNum" class="pageNum"></ul>
+        <span>下一页</span>
+        <span>尾页</span>
+        <input id="pageInput" type="text" value="1">
+    </div>
+
+</div>
+<div class="box">
+    <form>
+        <label for="name">姓名</label>
+        <input type="text" id="name">
+        <label for="sex">性别</label>
+        <input type="text" id="sex">
+        <label for="score">分数</label>
+        <input type="text" id="score">
+        <input type="button" value="增加新用户" id="submit">
+    </form>
+</div>
+
+</body>
+</html>
+<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/userList.js"></script>
