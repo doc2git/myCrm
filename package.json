@@ -1,0 +1,28 @@
+{
+  "name": "myCRM",
+  "version": "1.0.0",
+  "description": "",
+  "main": "init.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "multer": "^1.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "mocData":"node data/createData.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doc2git/myCrm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/doc2git/myCrm/issues"
+  },
+  "homepage": "https://github.com/doc2git/myCrm#readme"
+}
